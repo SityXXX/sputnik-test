@@ -10,6 +10,7 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 
 Vue.http.options.root = 'https://vuejs-8a6c5.firebaseio.com/customers';
+Vue.config.productionTip = false;
 
 const router = new VueRouter({
     routes,

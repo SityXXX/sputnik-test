@@ -10,32 +10,32 @@
                         && sortConfig.direction === 'asc'
                         && customerList.length > 1"
                            class="fa fa-sort-asc"
-                           @click="customerList = sortArr(customerList, 'desc', 'age')"></i>
+                           @click="sortArr('desc', 'age')"></i>
                         <i v-if="sortConfig.type === 'age'
                         && sortConfig.direction === 'desc'
                         && customerList.length > 1"
                            class="fa fa-sort-desc"
-                           @click="customerList = sortArr(customerList, 'asc', 'age')"></i>
+                           @click="sortArr('asc', 'age')"></i>
                         <i v-if="sortConfig.type === 'location'
                         || customerList.length < 2"
                            class="fa fa-sort"
-                           @click="customerList = sortArr(customerList, 'desc','age')"></i>
+                           @click="sortArr('desc','age')"></i>
                     </td>
                     <td>Місто
                         <i v-if="sortConfig.type === 'location'
                         && sortConfig.direction === 'asc'
                         && customerList.length > 1"
                            class="fa fa-sort-asc"
-                           @click="customerList = customerList = sortArr(customerList, 'desc', 'location')"></i>
+                           @click="sortArr('desc', 'location')"></i>
                         <i v-if="sortConfig.type === 'location'
                         && sortConfig.direction === 'desc'
                         && customerList.length > 1"
                            class="fa fa-sort-desc"
-                           @click="customerList = sortArr(customerList, 'asc', 'location')"></i>
+                           @click="sortArr('asc', 'location')"></i>
                         <i v-if="sortConfig.type === 'age'
                         || customerList.length < 2"
                            class="fa fa-sort"
-                           @click="customerList = sortArr(customerList, 'desc','location')"></i>
+                           @click="sortArr('desc','location')"></i>
                     </td>
                     <td>Фото</td>
                     <td></td>
@@ -117,9 +117,8 @@ export default {
                    this.customerList = this.customerList.filter((el) => {
                        return el.id !== key;
                    });
-                   this.customerList = this.sortArr(this.customerList, this.sortConfig.direction, this.sortConfig.type);
+                   this.sortArr(this.sortConfig.direction, this.sortConfig.type);
                 });
-            console.log(key);
         },
 
         // Post data to DB
@@ -133,7 +132,7 @@ export default {
                     let age = this.userData.age;
                     let location = this.userData.location;
                     this.customerList.push({id: id, name: name, suname: suname, lastName: lastName, age: age, location: location});
-                    this.customerList = this.sortArr(this.customerList, this.sortConfig.direction, this.sortConfig.type);
+                    this.sortArr(this.sortConfig.direction, this.sortConfig.type);
                     console.log(respons);
                 }, error => {
                     console.log(error);
@@ -154,7 +153,8 @@ export default {
                         data[key]['id'] = key;
                         usersArray.push(data[key]);
                     }
-                    this.customerList = this.sortArr(usersArray, this.sortConfig.direction, this.sortConfig.type);
+                    this.customerList = usersArray;
+                    this.sortArr(this.sortConfig.direction, this.sortConfig.type);
                 });
         },
 
@@ -162,23 +162,22 @@ export default {
         // [customerList: Array]
         // [direction: String]
         // [type: String]
-        sortArr(customerList, direction = 'asc', type = 'age') {
-            if(Array.isArray(customerList) && customerList.length > 1) {
+        sortArr(direction = 'asc', type = 'age') {
+            if(Array.isArray(this.customerList) && this.customerList.length > 1) {
 
                 this.sortConfig.type = type;
                 this.sortConfig.direction = direction;
 
-                customerList.sort((a, b) => {
+                this.customerList.sort((a, b) => {
                     if (a[type] > b[type]) return 1;
                     if (a[type] < b[type]) return -1;
                     return 0;
                 });
 
                 if (direction === 'desc') {
-                    customerList.reverse();
+                    this.customerList.reverse();
                 }
             }
-                return customerList;
 
         }
 
